@@ -220,8 +220,9 @@ body{
 
 .eq{
   font-family:var(--body);font-weight:700;
-  font-size:clamp(2.6rem,13vw,4.6rem);line-height:1;
+  font-size:clamp(2.1rem,11vw,4.1rem);line-height:1;
   letter-spacing:-1px;display:flex;align-items:baseline;gap:.12em;
+  flex-wrap:wrap;justify-content:center;
   font-variant-numeric:tabular-nums;position:relative;
 }
 .eq .x{color:var(--plasma);font-size:.72em}
@@ -231,6 +232,25 @@ body{
   color:var(--solar);text-align:center;
 }
 .slot.empty{color:rgba(255,176,32,.4)}
+.slot.ok{
+  color:var(--plasma);border-bottom-color:var(--plasma);
+  background:rgba(43,245,200,.18);
+  box-shadow:0 0 30px rgba(43,245,200,.45);
+}
+.slot.no{
+  color:#FF8FBA;border-bottom-color:var(--magenta);
+  background:rgba(255,61,138,.16);
+  text-decoration:line-through;text-decoration-thickness:.09em;
+  text-decoration-color:var(--magenta);
+}
+.stamp{
+  display:inline-block;font-size:.6em;line-height:1;margin-left:.14em;
+  opacity:0;transform:scale(.3) rotate(-18deg);transform-origin:center;
+}
+.stamp.ok{color:var(--plasma);text-shadow:0 0 22px rgba(43,245,200,.7)}
+.stamp.no{color:var(--magenta);text-shadow:0 0 18px rgba(255,61,138,.6)}
+.stamp.on{animation:stampin .4s cubic-bezier(.2,1.75,.4,1) forwards}
+@keyframes stampin{to{opacity:1;transform:scale(1) rotate(0)}}
 .caret{display:inline-block;width:3px;height:.8em;background:var(--solar);animation:blink 1s steps(1) infinite;vertical-align:-.04em;margin-left:1px}
 @keyframes blink{50%{opacity:0}}
 
@@ -242,7 +262,18 @@ body{
 .msg.good{color:var(--plasma);text-shadow:0 0 18px rgba(43,245,200,.6)}
 .msg.bad{color:#FF8FBA}
 .msg .fact{display:block;font-family:var(--body);font-weight:600;font-size:1.5em;color:var(--star);margin-top:6px;letter-spacing:0}
+.msg .fact em{font-style:normal;color:var(--plasma)}
 .msg .why{display:block;font-family:var(--data);font-weight:500;font-size:.72em;color:var(--dim);letter-spacing:.06em;margin-top:5px;text-transform:uppercase}
+.unlock{
+  position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);z-index:40;
+  display:none;align-items:center;gap:8px;
+  font-family:var(--data);font-weight:700;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--solar);color:#2A1800;border:0;padding:11px 16px;cursor:pointer;
+  box-shadow:0 5px 0 #8A5200,0 0 30px rgba(255,176,32,.5);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+}
+.unlock.show{display:flex}
 .combo{
   position:absolute;top:10px;right:12px;
   font-family:var(--display);font-size:clamp(.7rem,3.2vw,.9rem);color:var(--solar);
@@ -309,6 +340,8 @@ body{
 </head>
 <body>
 <canvas id="sky"></canvas>
+<audio id="silence" loop playsinline preload="auto" src="data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUAGAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA"></audio>
+<button class="unlock" id="unlockBtn" type="button">&#128266; Tap to switch the sound on</button>
 <div class="veil"></div>
 <div class="scan"></div>
 
@@ -456,16 +489,69 @@ var S={
   timer:null, deadline:0
 };
 
-/* ---------- sound (WebAudio, no assets) ---------- */
-var AC=null;
+/* ---------- sound: a synthesised space station (no audio files) ----------
+   Everything below is generated by WebAudio at runtime: oscillators for
+   tones and sweeps, filtered white noise for thrusters and airlocks, and
+   a three-oscillator drone bed that hums under the mission.
+------------------------------------------------------------------------ */
+var AC=null, MASTER=null, NOISE=null, DRONE=null;
+
 function ac(){
   if(!S.sound) return null;
   try{
-    if(!AC){ var C=window.AudioContext||window.webkitAudioContext; if(!C) return null; AC=new C(); }
+    if(!AC){
+      var C=window.AudioContext||window.webkitAudioContext;
+      if(!C) return null;
+      AC=new C();
+      MASTER=AC.createGain();
+      MASTER.gain.value=0.9;
+      MASTER.connect(AC.destination);
+    }
     if(AC.state==='suspended') AC.resume();
     return AC;
   }catch(e){ return null; }
 }
+
+/* Getting sound out of a phone or tablet takes three things, not one:
+   a user gesture to create the context, an audio session that ignores
+   the iPad's side mute switch, and a silent looping element to hold
+   that session open. Miss any one and the station plays in silence. */
+var UNLOCKED=false;
+function unlockAudio(){
+  if(!S.sound) return;
+  try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
+  var sil=el('silence');
+  if(sil && sil.paused){ try{ sil.volume=1; var pr=sil.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){} }
+  var c=ac(); if(!c) return;
+  try{
+    if(c.state!=='running' && c.resume) c.resume();
+    var b=c.createBuffer(1,1,22050), src=c.createBufferSource();
+    src.buffer=b; src.connect(MASTER); src.start(0);
+  }catch(e){}
+  if(c.state==='running'){ UNLOCKED=true; showUnlock(false); }
+}
+function showUnlock(on){
+  var b=el('unlockBtn'); if(b) b.classList.toggle('show', !!on);
+}
+/* Any touch anywhere counts as the gesture, so the first tap on a table
+   button does the unlocking without the child noticing. */
+['pointerdown','touchend','click','keydown'].forEach(function(ev){
+  document.addEventListener(ev, function(){
+    if(UNLOCKED || !S.sound) return;
+    unlockAudio();
+  }, {passive:true});
+});
+
+function noiseBuffer(c){
+  if(NOISE) return NOISE;
+  var len=Math.floor(c.sampleRate*2);
+  NOISE=c.createBuffer(1,len,c.sampleRate);
+  var d=NOISE.getChannelData(0);
+  for(var i=0;i<len;i++) d[i]=Math.random()*2-1;
+  return NOISE;
+}
+
+/* one oscillator with an attack/decay envelope */
 function tone(freq,dur,type,vol,when){
   var c=ac(); if(!c) return;
   var t=c.currentTime+(when||0);
@@ -474,17 +560,118 @@ function tone(freq,dur,type,vol,when){
   g.gain.setValueAtTime(0.0001,t);
   g.gain.exponentialRampToValueAtTime(vol||0.16,t+0.012);
   g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-  o.connect(g); g.connect(c.destination);
-  o.start(t); o.stop(t+dur+0.02);
+  o.connect(g); g.connect(MASTER);
+  o.start(t); o.stop(t+dur+0.03);
 }
+
+/* a pitch sweep through a resonant lowpass - lasers and power-downs */
+function sweep(f0,f1,dur,type,vol,when,q){
+  var c=ac(); if(!c) return;
+  var t=c.currentTime+(when||0);
+  var o=c.createOscillator(), g=c.createGain(), f=c.createBiquadFilter();
+  o.type=type||'sawtooth';
+  o.frequency.setValueAtTime(f0,t);
+  o.frequency.exponentialRampToValueAtTime(Math.max(f1,20),t+dur);
+  f.type='lowpass'; f.Q.value=q||4;
+  f.frequency.setValueAtTime(Math.max(f0,f1)*2.5,t);
+  f.frequency.exponentialRampToValueAtTime(Math.max(f1,80)*2.5,t+dur);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol||0.1,t+0.015);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(f); f.connect(g); g.connect(MASTER);
+  o.start(t); o.stop(t+dur+0.03);
+}
+
+/* filtered white noise - thrusters, airlocks, console static */
+function hiss(dur,vol,when,f0,f1,type){
+  var c=ac(); if(!c) return;
+  var t=c.currentTime+(when||0);
+  var src=c.createBufferSource(); src.buffer=noiseBuffer(c);
+  var f=c.createBiquadFilter(), g=c.createGain();
+  f.type=type||'bandpass'; f.Q.value=1.1;
+  f.frequency.setValueAtTime(f0,t);
+  f.frequency.exponentialRampToValueAtTime(Math.max(f1,40),t+dur);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol,t+Math.min(0.04,dur*0.3));
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  src.connect(f); f.connect(g); g.connect(MASTER);
+  src.start(t); src.stop(t+dur+0.05);
+}
+
+/* the ambient bed: two detuned saws and a sine, swept by a slow LFO */
+function startDrone(){
+  var c=ac(); if(!c || DRONE) return;
+  var g=c.createGain(); g.gain.value=0.0001; g.connect(MASTER);
+  var lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=320; lp.Q.value=3; lp.connect(g);
+  var o1=c.createOscillator(); o1.type='sawtooth'; o1.frequency.value=55;
+  var o2=c.createOscillator(); o2.type='sawtooth'; o2.frequency.value=55.4;
+  var o3=c.createOscillator(); o3.type='sine';     o3.frequency.value=110;
+  var lfo=c.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.06;
+  var lfoAmt=c.createGain(); lfoAmt.gain.value=170;
+  lfo.connect(lfoAmt); lfoAmt.connect(lp.frequency);
+  o1.connect(lp); o2.connect(lp); o3.connect(lp);
+  g.gain.linearRampToValueAtTime(0.05, c.currentTime+2.2);
+  var nodes=[o1,o2,o3,lfo];
+  nodes.forEach(function(o){ try{ o.start(); }catch(e){} });
+  DRONE={g:g, nodes:nodes};
+}
+function stopDrone(){
+  if(!DRONE || !AC) return;
+  var d=DRONE; DRONE=null;
+  try{
+    var t=AC.currentTime;
+    d.g.gain.cancelScheduledValues(t);
+    d.g.gain.setValueAtTime(d.g.gain.value,t);
+    d.g.gain.linearRampToValueAtTime(0.0001,t+0.7);
+  }catch(e){}
+  setTimeout(function(){ d.nodes.forEach(function(o){ try{ o.stop(); }catch(e){} }); }, 1000);
+}
+
 var SFX={
-  tap:function(){ tone(680,0.05,'square',0.07); },
-  del:function(){ tone(240,0.07,'square',0.07); },
-  good:function(n){ var b=520+Math.min(n,6)*50; tone(b,0.1,'square',0.14); tone(b*1.5,0.14,'square',0.11,0.07); },
-  bad:function(){ tone(200,0.16,'sawtooth',0.10); tone(150,0.22,'sawtooth',0.09,0.1); },
-  launch:function(){ tone(300,0.1,'square',0.12); tone(450,0.1,'square',0.12,0.09); tone(700,0.2,'square',0.12,0.18); },
-  fanfare:function(){ [523,659,784,1047].forEach(function(f,k){ tone(f,0.28,'triangle',0.15,k*0.11); }); },
-  tick:function(){ tone(900,0.03,'square',0.05); }
+  /* console key: a click of static over a short high blip */
+  tap:function(){ tone(1180,0.032,'square',0.05); hiss(0.03,0.028,0,2600,1400); },
+  del:function(){ sweep(620,240,0.1,'square',0.07,0,2); },
+
+  /* correct: a laser pulse, then a note that climbs a semitone per streak */
+  good:function(n){
+    var note=523.25*Math.pow(2, Math.min(n-1,9)/12);
+    sweep(2100,note,0.15,'sawtooth',0.09,0,7);
+    tone(note,0.20,'triangle',0.15,0.05);
+    tone(note*2,0.24,'sine',0.08,0.08);
+    tone(note*3,0.18,'sine',0.04,0.10);
+    hiss(0.10,0.035,0,4000,1100);
+  },
+
+  /* wrong: the console powers down, no harsh buzzer */
+  bad:function(){
+    sweep(440,70,0.55,'sawtooth',0.10,0,5);
+    tone(98,0.45,'sine',0.11,0.02);
+    hiss(0.40,0.045,0,1000,160,'lowpass');
+  },
+
+  /* launch: thruster burn, then two rising signal tones */
+  launch:function(){
+    hiss(0.95,0.09,0,180,2600);
+    sweep(110,880,0.75,'sawtooth',0.07,0,3);
+    tone(659.25,0.13,'triangle',0.12,0.58);
+    tone(987.77,0.22,'triangle',0.12,0.70);
+  },
+
+  /* new question: a soft sonar ping so each one gets a beat of its own */
+  ping:function(){ tone(1320,0.09,'sine',0.045); tone(1980,0.07,'sine',0.02,0.05); },
+
+  /* turbo timer running out */
+  tick:function(){ tone(1560,0.05,'sine',0.06); tone(1560,0.05,'sine',0.04,0.18); },
+
+  /* round over: airlock cycles, then a five-note arpeggio */
+  dock:function(){ hiss(0.7,0.06,0,1800,220,'lowpass'); sweep(300,120,0.6,'sine',0.06,0,2); },
+  fanfare:function(){
+    [523.25,659.25,783.99,1046.50,1318.51].forEach(function(f,k){
+      tone(f,0.30,'triangle',0.14,k*0.10);
+      tone(f*2,0.24,'sine',0.05,k*0.10+0.03);
+    });
+    hiss(1.1,0.035,0.15,600,3200);
+  }
 };
 function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 
@@ -610,8 +797,19 @@ function toggle(id,prop){
   b.addEventListener('click',function(){
     S[prop]=!S[prop];
     b.setAttribute('aria-pressed', String(S[prop]));
-    if(prop==='sound'){ if(S.sound){ AC=null; SFX.tap(); } }
-    else SFX.tap();
+    if(prop==='sound'){
+      if(S.sound){
+        if(MASTER){ try{ MASTER.gain.value=0.9; }catch(e){} }
+        UNLOCKED=false; unlockAudio();
+        SFX.tap();
+        if(el('s-play').classList.contains('on')) startDrone();
+      }else{
+        stopDrone();
+        if(MASTER){ try{ MASTER.gain.value=0; }catch(e){} }
+        try{ el('silence').pause(); }catch(e){}
+        showUnlock(false);
+      }
+    } else SFX.tap();
   });
 }
 
@@ -658,8 +856,15 @@ function startRound(fixOnly){
   paintPips();
   el('fuse').classList.toggle('on', S.turbo && !S.fixing);
   screenTo('play');
+  unlockAudio();
   SFX.launch();
+  startDrone();
   nextQ();
+  /* If the browser still has not given us a running context, say so
+     rather than leaving him tapping a silent console. */
+  setTimeout(function(){
+    showUnlock(S.sound && (!AC || AC.state!=='running'));
+  }, 400);
 }
 
 function paintPips(){
@@ -682,7 +887,8 @@ function paintEq(){
   var shown = S.entry==='' ? '<span class="caret"></span>' : S.entry;
   el('eq').innerHTML =
     '<span>'+q.a+'</span><span class="x">&times;</span><span>'+q.b+'</span>'+
-    '<span class="x">=</span><span class="slot'+(S.entry===''?' empty':'')+'" id="slot">'+shown+'</span>';
+    '<span class="x">=</span><span class="slot'+(S.entry===''?' empty':'')+'" id="slot">'+shown+'</span>'+
+    '<span class="stamp" id="stamp"></span>';
 }
 
 function nextQ(){
@@ -691,6 +897,7 @@ function nextQ(){
   el('msg').className='msg'; el('msg').innerHTML='';
   el('port').className='port chamf-all';
   paintEq(); paintPips(); paintHud();
+  SFX.ping();
   S.startedAt=Date.now();
   if(S.turbo && !S.fixing) runFuse();
 }
@@ -728,7 +935,18 @@ function resolve(ok, val, ms, ranOut){
   q.got=val; q.ok=ok; q.ms=ms;
   S.elapsed+=ms;
 
-  var port=el('port'), msg=el('msg');
+  var port=el('port'), msg=el('msg'), slot=el('slot'), stamp=el('stamp');
+
+  /* the answer box is the indicator: it goes green with a tick when the
+     answer is right, magenta and struck through when it is not. */
+  if(slot){
+    if(ranOut && S.entry===''){ slot.textContent='?'; }
+    slot.className='slot '+(ok?'ok':'no');
+  }
+  if(stamp){
+    stamp.textContent = ok ? '✔' : '✘';
+    stamp.className='stamp '+(ok?'ok':'no')+' on';
+  }
 
   if(ok){
     S.correct++; S.streak++;
@@ -740,8 +958,10 @@ function resolve(ok, val, ms, ranOut){
     if(!S.fixing && DB.errs[q.key]) { DB.errs[q.key]--; if(DB.errs[q.key]<=0) delete DB.errs[q.key]; }
     port.className='port chamf-all good';
     msg.className='msg good';
-    msg.innerHTML=pick(['NAILED IT!','BOOM!','ON TARGET!','LOCKED IN!','TOO EASY!','SHARP!'])+
-      (speedBonus===50?'<span class="why">Lightning bonus +50</span>':'');
+    msg.innerHTML=pick(['CORRECT!','NAILED IT!','ON TARGET!','LOCKED IN!','SPOT ON!','DIRECT HIT!'])+
+      '<span class="fact">'+q.a+' × '+q.b+' = <em>'+q.ans+'</em></span>'+
+      (speedBonus===50?'<span class="why">Lightning bonus +50</span>'
+                      :'<span class="why">+'+(100+speedBonus+streakBonus)+' points</span>');
     if(S.streak>=3){ el('combo').textContent='×'+S.streak+' STREAK'; el('combo').className='combo show';
       setTimeout(function(){ el('combo').className='combo'; },820); }
     SFX.good(S.streak); buzz(20);
@@ -758,7 +978,7 @@ function resolve(ok, val, ms, ranOut){
 
   paintHud();
   if(!S.fixing) save();
-  setTimeout(function(){ S.i++; nextQ(); }, ok?700:2100);
+  setTimeout(function(){ S.i++; nextQ(); }, ok?1000:2400);
 }
 
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
@@ -792,6 +1012,9 @@ var RANKS=[
 
 function finish(){
   clearTimer();
+  stopDrone();
+  showUnlock(false);
+  SFX.dock();
   var total=S.qs.length;
   var acc=Math.round(S.correct/total*100);
   var avg=(S.elapsed/total/1000);
@@ -824,9 +1047,12 @@ function finish(){
   }
 
   var missed=S.qs.filter(function(q){ return !q.ok; });
-  el('dListHead').textContent = missed.length ? 'Facts to fix ('+missed.length+')' : 'Mission log — all clear';
+  var got=S.qs.filter(function(q){ return q.ok; });
+  el('dListHead').textContent = missed.length
+    ? 'Mission log — '+got.length+' right, '+missed.length+' to fix'
+    : 'Mission log — all ten correct';
   var list=el('dList'); list.innerHTML='';
-  (missed.length?missed:S.qs).forEach(function(q){
+  missed.concat(got).forEach(function(q){
     var row=document.createElement('div');
     row.className='rrow'+(q.ok?'':' miss');
     row.innerHTML='<span class="tick">'+(q.ok?'✅':'❌')+'</span>'+
@@ -856,11 +1082,18 @@ function missionName(){
 paintTables(); paintNail(); buildPad();
 toggle('opt-turbo','turbo'); toggle('opt-flip','flip'); toggle('opt-sound','sound');
 
+el('unlockBtn').addEventListener('click',function(e){
+  e.stopPropagation();
+  UNLOCKED=false;
+  unlockAudio();
+  SFX.ping();
+  showUnlock(S.sound && (!AC || AC.state!=='running'));
+});
 el('launch').addEventListener('click',function(){ startRound(null); });
 el('again').addEventListener('click',function(){ startRound(null); });
 el('fixit').addEventListener('click',function(){ startRound(S._missed); });
-el('home').addEventListener('click',function(){ clearTimer(); SFX.tap(); screenTo('home'); });
-el('abort').addEventListener('click',function(){ clearTimer(); S.locked=true; screenTo('home'); });
+el('home').addEventListener('click',function(){ clearTimer(); stopDrone(); SFX.tap(); screenTo('home'); });
+el('abort').addEventListener('click',function(){ clearTimer(); stopDrone(); S.locked=true; screenTo('home'); });
 
 /* keep the console from bouncing on iOS */
 document.addEventListener('touchmove',function(e){
