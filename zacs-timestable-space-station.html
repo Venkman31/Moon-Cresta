@@ -100,6 +100,48 @@ body{
 }
 .block h2::after{content:"";flex:1;height:1px;background:var(--edge)}
 
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.segb{
+  appearance:none;border:1px solid var(--edge);background:var(--hull-lit);color:var(--star);
+  font-family:var(--body);font-weight:600;font-size:.86rem;padding:9px 2px 10px;cursor:pointer;
+  clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);
+}
+.segb .sym{display:block;font-family:var(--data);font-weight:700;font-size:1.25rem;line-height:1.1}
+.segb[aria-pressed="true"]{background:var(--solar);color:#2A1800;border-color:var(--solar);box-shadow:0 0 22px rgba(255,176,32,.45)}
+
+.homefoot{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.backbtn{margin-top:2px}
+
+/* leaderboard */
+.brow{
+  display:grid;grid-template-columns:2.1em 1fr auto;align-items:center;gap:9px;
+  background:var(--hull-lit);border:1px solid var(--edge);border-left:4px solid var(--edge);
+  padding:8px 10px;
+}
+.brow.gold{border-left-color:var(--solar);background:rgba(255,176,32,.1)}
+.brow.fresh{border-left-color:var(--plasma);background:rgba(43,245,200,.1)}
+.brow .pos{font-family:var(--display);font-size:1rem;color:var(--dim)}
+.brow.gold .pos{color:var(--solar)}
+.brow.fresh .pos{color:var(--plasma)}
+.brow .what{font-family:var(--data);font-weight:700;font-size:.92rem;line-height:1.25}
+.brow .whn{display:block;font-weight:500;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+.brow .pts{font-family:var(--data);font-weight:700;font-size:1.05rem;color:var(--solar);text-align:right;font-variant-numeric:tabular-nums}
+.brow .pts small{display:block;font-size:.6rem;font-weight:500;color:var(--plasma);letter-spacing:.08em}
+.empty{font-family:var(--data);font-weight:500;font-size:.82rem;color:var(--dim);line-height:1.5}
+
+/* parent view */
+.tstat{display:grid;grid-template-columns:2.9em 1fr 2.9em 3.2em;align-items:center;gap:8px;padding:3px 0}
+.tstat .tname{font-family:var(--data);font-weight:700;font-size:.9rem;color:var(--star)}
+.tstat .ttrack{height:9px;background:#0C1030;border:1px solid var(--edge);overflow:hidden}
+.tstat .ttrack i{display:block;height:100%;background:var(--dim)}
+.tstat .ttrack i.hi{background:var(--plasma)}
+.tstat .ttrack i.mid{background:var(--solar)}
+.tstat .ttrack i.lo{background:var(--magenta)}
+.tstat .tpct{font-family:var(--data);font-weight:700;font-size:.82rem;text-align:right;font-variant-numeric:tabular-nums}
+.tstat .tn{font-family:var(--data);font-weight:500;font-size:.6rem;color:var(--dim);text-align:right;letter-spacing:.06em}
+.legend{font-family:var(--data);font-weight:500;font-size:.62rem;color:var(--dim);letter-spacing:.08em;margin-top:9px;line-height:1.6}
+.danger{border-color:rgba(255,61,138,.6);color:#FFA9CB}
+.danger.armed{background:var(--magenta);color:#fff;border-color:var(--magenta)}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
 .tbtn{
   appearance:none;border:1px solid var(--edge);background:var(--hull-lit);
@@ -357,6 +399,15 @@ body{
 
     <div class="homescroll">
       <div class="panel chamf block">
+        <h2>What are we practising?</h2>
+        <div class="seg" id="ops">
+          <button class="segb" type="button" data-op="mul" aria-pressed="true"><span class="sym">&times;</span>Times</button>
+          <button class="segb" type="button" data-op="div" aria-pressed="false"><span class="sym">&divide;</span>Divide</button>
+          <button class="segb" type="button" data-op="mix" aria-pressed="false"><span class="sym">&times;&divide;</span>Both</button>
+        </div>
+      </div>
+
+      <div class="panel chamf block">
         <h2>Pick your mission</h2>
         <div class="grid" id="tables"></div>
       </div>
@@ -386,6 +437,62 @@ body{
     </div>
 
     <button class="cta chamf-all" id="launch">LAUNCH &#9654;</button>
+    <div class="homefoot">
+      <button class="ghost" id="toBoard">&#127942; Top runs</button>
+      <button class="ghost" id="toStats">&#128202; Progress</button>
+    </div>
+  </section>
+
+  <!-- ============ LEADERBOARD ============ -->
+  <section id="s-board" class="screen">
+    <header class="brand">
+      <h1 class="zac" style="font-size:clamp(1.2rem,6vw,1.9rem)">TOP TEN RUNS</h1>
+      <p class="tag">Best scores only &middot; bad days are not recorded here</p>
+    </header>
+    <div class="homescroll">
+      <div class="panel chamf block">
+        <h2>Hall of fame</h2>
+        <div class="rlist" id="boardList"></div>
+      </div>
+    </div>
+    <button class="ghost backbtn" id="boardBack">&#9664; Back to the launch pad</button>
+  </section>
+
+  <!-- ============ PARENT / PROGRESS ============ -->
+  <section id="s-stats" class="screen">
+    <header class="brand">
+      <h1 class="zac" style="font-size:clamp(1.2rem,6vw,1.9rem)">PROGRESS REPORT</h1>
+      <p class="tag">Every question ever answered on this device</p>
+    </header>
+    <div class="homescroll">
+      <div class="bigrow">
+        <div class="big c chamf"><div class="v" id="pQ">0</div><div class="k">Questions</div></div>
+        <div class="big a chamf"><div class="v" id="pAcc">&mdash;</div><div class="k">Accuracy</div></div>
+        <div class="big b chamf"><div class="v" id="pRuns">0</div><div class="k">Sessions</div></div>
+      </div>
+
+      <div class="panel chamf block">
+        <h2>Accuracy by table</h2>
+        <div id="pTables"></div>
+        <p class="legend">Bars count every fact containing that number, times and division together. Grey means not practised yet.</p>
+      </div>
+
+      <div class="panel chamf block">
+        <h2>Most missed facts</h2>
+        <div class="nail" id="pMissed"></div>
+      </div>
+
+      <div class="panel chamf block">
+        <h2>Recent sessions</h2>
+        <div class="rlist" id="pRecent"></div>
+      </div>
+
+      <div class="panel chamf block">
+        <h2>Data</h2>
+        <button class="ghost danger" id="wipe">Erase all progress</button>
+      </div>
+    </div>
+    <button class="ghost backbtn" id="statsBack">&#9664; Back to the launch pad</button>
   </section>
 
   <!-- ============ MISSION ============ -->
@@ -458,27 +565,49 @@ body{
      does not touch the recorded score.
 --------------------------------------------------------- */
 
-var STORE='zac_tss_v1';
+var STORE='zac_tss_v2';
 var LOW=2, HIGH=12, ROUND=10;
 var BOSS=[6,7,8,9,11,12];
 
 var el=function(id){return document.getElementById(id);};
 
 /* ---------- persistence (never let it break the game) ---------- */
+function blank(){ return {v:2, best:{}, facts:{}, runs:[], pref:{}}; }
 function load(){
   try{
-    var raw=localStorage.getItem(STORE);
-    if(!raw) throw 0;
-    var d=JSON.parse(raw);
-    return {best:d.best||{}, errs:d.errs||{}, seen:d.seen||{}};
-  }catch(e){ return {best:{}, errs:{}, seen:{}}; }
+    var d=JSON.parse(localStorage.getItem(STORE));
+    if(!d || d.v!==2) throw 0;
+    return {v:2, best:d.best||{}, facts:d.facts||{}, runs:d.runs||[], pref:d.pref||{}};
+  }catch(e){ return blank(); }
+}
+
+/* facts[key] = {n: times asked, w: times wrong, cur: wrong since last right}
+   n and w are lifetime figures for the progress report; cur drives the
+   "facts to nail" list, so a fact leaves it as soon as he gets it right. */
+function recordFact(key, ok){
+  var f=DB.facts[key] || (DB.facts[key]={n:0,w:0,cur:0});
+  f.n++;
+  if(ok){ f.cur=0; } else { f.w++; f.cur++; }
+}
+function savePref(){
+  DB.pref={mission:S.mission, op:S.op, turbo:S.turbo, flip:S.flip, sound:S.sound};
+  save();
 }
 function save(){ try{ localStorage.setItem(STORE,JSON.stringify(DB)); }catch(e){} }
 var DB=load();
+(function restore(){
+  var q=DB.pref||{};
+  if(q.mission) S.mission=q.mission;
+  if(q.op) S.op=q.op;
+  if(typeof q.turbo==='boolean') S.turbo=q.turbo;
+  if(typeof q.flip==='boolean')  S.flip=q.flip;
+  if(typeof q.sound==='boolean') S.sound=q.sound;
+})();
 
 /* ---------- state ---------- */
 var S={
   mission:'random',   // '2'..'12' | 'random' | 'boss'
+  op:'mul',           // 'mul' | 'div' | 'mix'
   turbo:false,
   flip:true,
   sound:true,
@@ -714,9 +843,22 @@ function shuffle(a){
   return a;
 }
 function factKey(a,b){ var lo=Math.min(a,b), hi=Math.max(a,b); return lo+'x'+hi; }
+function opSym(op){ op=op||S.op; return op==='mul'?'×':(op==='div'?'÷':'×÷'); }
+function missionKey(m,op){ return (m||S.mission)+'|'+(op||S.op); }
+function missionLabel(m,op){
+  var o=opSym(op);
+  if(m==='random') return 'Random Mix '+o;
+  if(m==='boss')   return 'Boss Mix '+o;
+  return 'The '+m+'s '+o;
+}
+function when(ts){
+  var d=new Date(ts);
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+', '+
+         d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
 function range(lo,hi){ var r=[]; for(var i=lo;i<=hi;i++) r.push(i); return r; }
 function screenTo(name){
-  ['home','play','done'].forEach(function(n){ el('s-'+n).classList.toggle('on', n===name); });
+  ['home','play','done','board','stats'].forEach(function(n){ el('s-'+n).classList.toggle('on', n===name); });
 }
 
 /* ---------- question building ---------- */
@@ -739,10 +881,27 @@ function buildRound(){
     var mult=shuffle(range(LOW,HIGH)).slice(0,ROUND);
     for(k=0;k<mult.length;k++) pairs.push([n,mult[k]]);
   }
-  return pairs.map(function(p){
-    var a=p[0], b=p[1];
+  /* On "Both", fix an even five-and-five split and shuffle it, rather
+     than coin-flipping each question and landing on eight and two. */
+  var ops=pairs.map(function(_,i){
+    return S.op==='mix' ? (i%2===0?'mul':'div') : S.op;
+  });
+  if(S.op==='mix') shuffle(ops);
+
+  var fixedTable = !(S.mission==='random' || S.mission==='boss');
+
+  return pairs.map(function(pr,i){
+    var a=pr[0], b=pr[1], op=ops[i], product=a*b;
+    if(op==='div'){
+      /* Practising a single table means always dividing BY that number,
+         so 72 in the 8s asks 72 ÷ 8, never 72 ÷ 9. */
+      var d = fixedTable ? pr[0] : (Math.random()<0.5 ? a : b);
+      return {op:'div', a:a, b:b, left:product, right:d, sym:'÷',
+              ans:product/d, key:factKey(a,b), got:null, ok:false, ms:0};
+    }
     if(S.flip && Math.random()<0.5){ var t=a; a=b; b=t; }
-    return {a:a, b:b, ans:a*b, key:factKey(a,b), got:null, ok:false, ms:0};
+    return {op:'mul', a:a, b:b, left:a, right:b, sym:'×',
+            ans:product, key:factKey(a,b), got:null, ok:false, ms:0};
   });
 }
 
@@ -757,36 +916,53 @@ function paintTables(){
     b.dataset.v=val;
     b.innerHTML=label+(mini?'<span class="mini">'+mini+'</span>':'');
     b.addEventListener('click',function(){
-      S.mission=val; SFX.tap(); paintTables(); paintNail();
+      S.mission=val; SFX.tap(); paintTables(); paintNail(); savePref();
     });
     wrap.appendChild(b);
   }
   for(var n=2;n<=12;n++){
-    var bestK=DB.best[String(n)];
-    add(String(n), '&times;'+n, bestK?'BEST '+bestK.acc+'%':'', false, n===12);
+    var bestK=DB.best[missionKey(String(n))];
+    add(String(n), opSym()+n, bestK?'BEST '+bestK.acc+'%':'', false, n===12);
   }
-  var rb=DB.best['random'], bb=DB.best['boss'];
+  var rb=DB.best[missionKey('random')], bb=DB.best[missionKey('boss')];
   add('random','&#127756; RANDOM MIX', rb?'BEST '+rb.acc+'%':'ALL TABLES', true);
   add('boss','&#128128; BOSS MIX', bb?'BEST '+bb.acc+'%':'6 7 8 9 11 12', true);
+}
+
+function paintOps(){
+  var btns=el('ops').querySelectorAll('.segb');
+  for(var i=0;i<btns.length;i++){
+    (function(b){
+      b.setAttribute('aria-pressed', String(S.op===b.dataset.op));
+      if(!b._wired){
+        b._wired=true;
+        b.addEventListener('click',function(){
+          S.op=b.dataset.op; SFX.tap(); paintOps(); paintTables(); savePref();
+        });
+      }
+    })(btns[i]);
+  }
 }
 
 function paintNail(){
   var box=el('nail'); box.innerHTML='';
   var arr=[];
-  for(var k in DB.errs){ if(DB.errs[k]>0) arr.push([k,DB.errs[k]]); }
-  arr.sort(function(x,y){ return y[1]-x[1]; });
+  for(var k in DB.facts){ if(DB.facts[k].cur>0) arr.push([k,DB.facts[k]]); }
+  arr.sort(function(x,y){ return y[1].cur-x[1].cur || y[1].w-x[1].w; });
   if(!arr.length){
     var c=document.createElement('span');
     c.className='nailchip clean';
-    c.textContent=Object.keys(DB.seen).length ? 'Nothing missed yet. Nice flying.' : 'Fly a mission and your tricky facts land here.';
+    c.textContent=Object.keys(DB.facts).length
+      ? 'Nothing outstanding — every fact he has missed, he has since got right.'
+      : 'Fly a mission and your tricky facts land here.';
     box.appendChild(c);
     return;
   }
-  arr.slice(0,6).forEach(function(p){
-    var parts=p[0].split('x');
+  arr.slice(0,6).forEach(function(pr){
+    var t=pr[0].split('x');
     var c=document.createElement('span');
     c.className='nailchip';
-    c.textContent=parts[0]+' × '+parts[1]+' = '+(parts[0]*parts[1])+'  ×'+p[1];
+    c.textContent=t[0]+' × '+t[1]+' = '+(t[0]*t[1]);
     box.appendChild(c);
   });
 }
@@ -794,6 +970,7 @@ function paintNail(){
 function toggle(id,prop){
   var b=el(id);
   b.setAttribute('aria-pressed', String(S[prop]));
+  b._sync=function(){ b.setAttribute('aria-pressed', String(S[prop])); };
   b.addEventListener('click',function(){
     S[prop]=!S[prop];
     b.setAttribute('aria-pressed', String(S[prop]));
@@ -810,6 +987,7 @@ function toggle(id,prop){
         showUnlock(false);
       }
     } else SFX.tap();
+    savePref();
   });
 }
 
@@ -879,14 +1057,16 @@ function paintHud(){
   el('hScore').textContent=S.score;
   el('hStreak').textContent=S.streak;
   el('hStreakBox').classList.toggle('hot', S.streak>=3);
-  var done=S.i;
+  /* S.i still points at the question being shown, so while its verdict
+     is on screen it has to be counted or accuracy lags a question behind. */
+  var done=S.i+(S.locked?1:0);
   el('hAcc').textContent = done ? Math.round(S.correct/done*100)+'%' : '—';
 }
 function paintEq(){
   var q=S.qs[S.i]; if(!q) return;
   var shown = S.entry==='' ? '<span class="caret"></span>' : S.entry;
   el('eq').innerHTML =
-    '<span>'+q.a+'</span><span class="x">&times;</span><span>'+q.b+'</span>'+
+    '<span>'+q.left+'</span><span class="x">'+q.sym+'</span><span>'+q.right+'</span>'+
     '<span class="x">=</span><span class="slot'+(S.entry===''?' empty':'')+'" id="slot">'+shown+'</span>'+
     '<span class="stamp" id="stamp"></span>';
 }
@@ -954,24 +1134,26 @@ function resolve(ok, val, ms, ranOut){
     var speedBonus = ms<3000 ? 50 : (ms<6000 ? 25 : 0);
     var streakBonus = Math.min(S.streak-1,5)*20;
     S.score += 100 + speedBonus + streakBonus;
-    if(!S.fixing) DB.seen[q.key]=(DB.seen[q.key]||0)+1;
-    if(!S.fixing && DB.errs[q.key]) { DB.errs[q.key]--; if(DB.errs[q.key]<=0) delete DB.errs[q.key]; }
+    if(!S.fixing) recordFact(q.key, true);
     port.className='port chamf-all good';
     msg.className='msg good';
+    /* A division answer is worth tying back to the times-table fact it
+       came from, which is the whole point of teaching the two together. */
+    var inverse = q.op==='div' ? q.right+' × '+q.ans+' = '+q.left+' · ' : '';
     msg.innerHTML=pick(['CORRECT!','NAILED IT!','ON TARGET!','LOCKED IN!','SPOT ON!','DIRECT HIT!'])+
-      '<span class="fact">'+q.a+' × '+q.b+' = <em>'+q.ans+'</em></span>'+
-      (speedBonus===50?'<span class="why">Lightning bonus +50</span>'
-                      :'<span class="why">+'+(100+speedBonus+streakBonus)+' points</span>');
+      '<span class="fact">'+q.left+' '+q.sym+' '+q.right+' = <em>'+q.ans+'</em></span>'+
+      '<span class="why">'+inverse+(speedBonus===50?'Lightning bonus +50'
+                                    :'+'+(100+speedBonus+streakBonus)+' points')+'</span>';
     if(S.streak>=3){ el('combo').textContent='×'+S.streak+' STREAK'; el('combo').className='combo show';
       setTimeout(function(){ el('combo').className='combo'; },820); }
     SFX.good(S.streak); buzz(20);
   }else{
     S.streak=0;
-    if(!S.fixing){ DB.seen[q.key]=(DB.seen[q.key]||0)+1; DB.errs[q.key]=(DB.errs[q.key]||0)+1; }
+    if(!S.fixing) recordFact(q.key, false);
     port.className='port chamf-all bad';
     msg.className='msg bad';
     msg.innerHTML=(ranOut?'OUT OF TIME':'NOT QUITE')+
-      '<span class="fact">'+q.a+' × '+q.b+' = '+q.ans+'</span>'+
+      '<span class="fact">'+q.left+' '+q.sym+' '+q.right+' = '+q.ans+'</span>'+
       '<span class="why">'+hint(q)+'</span>';
     SFX.bad(); buzz([30,40,30]);
   }
@@ -986,6 +1168,7 @@ function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 /* A single anchoring strategy per fact - the kind of thing a
    Year 4 teacher says out loud, not a generic "try again". */
 function hint(q){
+  if(q.op==='div') return 'Because '+q.right+' × '+q.ans+' = '+q.left;
   var a=Math.min(q.a,q.b), b=Math.max(q.a,q.b);
   if(b===12) return a+' \u00D7 10 = '+(a*10)+', plus '+a+' \u00D7 2 = '+(a*2);
   if(b===11) return (a<10 ? 'Elevens double up: '+a+a : a+' \u00D7 10 = '+(a*10)+', plus another '+a);
@@ -1035,13 +1218,27 @@ function finish(){
   var bestEl=el('dBest');
   bestEl.hidden=true;
   if(!S.fixing){
-    var cur=DB.best[S.mission];
+    var mk=missionKey();
+    var cur=DB.best[mk];
     var better = !cur || acc>cur.acc || (acc===cur.acc && S.score>cur.score);
+    if(better) DB.best[mk]={acc:acc, score:S.score};
+
+    var run={t:Date.now(), m:S.mission, op:S.op, acc:acc, sc:S.score,
+             c:S.correct, n:total, ms:S.elapsed};
+    DB.runs.unshift(run);
+    if(DB.runs.length>200) DB.runs.length=200;
+    S._lastRun=run.t;
+
+    var pos=0, top=topRuns();
+    for(var z=0;z<top.length;z++){ if(top[z].t===run.t){ pos=z+1; break; } }
+
     if(better){
-      DB.best[S.mission]={acc:acc, score:S.score};
       bestEl.hidden=false;
       bestEl.textContent='⭐ NEW STATION RECORD FOR '+missionName()+' ⭐';
       SFX.fanfare();
+    }else if(pos){
+      bestEl.hidden=false;
+      bestEl.textContent='🏆 STRAIGHT INTO THE TOP TEN AT NUMBER '+pos;
     }
     save();
   }
@@ -1056,7 +1253,7 @@ function finish(){
     var row=document.createElement('div');
     row.className='rrow'+(q.ok?'':' miss');
     row.innerHTML='<span class="tick">'+(q.ok?'✅':'❌')+'</span>'+
-      '<span class="q">'+q.a+' × '+q.b+' = '+q.ans+'</span>'+
+      '<span class="q">'+q.left+' '+q.sym+' '+q.right+' = '+q.ans+'</span>'+
       (q.ok?'<span class="got">'+(q.ms/1000).toFixed(1)+'s</span>'
            :'<span class="got">you said '+(q.got===null?'—':q.got)+'</span>');
     list.appendChild(row);
@@ -1073,13 +1270,103 @@ function finish(){
 }
 
 function missionName(){
-  if(S.mission==='random') return 'RANDOM MIX';
-  if(S.mission==='boss') return 'BOSS MIX';
+  var o = S.op==='div' ? 'DIVISION' : (S.op==='mix' ? 'BOTH WAYS' : 'TIMES');
+  if(S.mission==='random') return 'THE RANDOM MIX, '+o;
+  if(S.mission==='boss')   return 'THE BOSS MIX, '+o;
+  if(S.op==='div')         return 'DIVIDING BY '+S.mission;
+  if(S.op==='mix')         return 'THE '+S.mission+'s, BOTH WAYS';
   return 'THE '+S.mission+' TIMES TABLE';
 }
 
+/* ---------- leaderboard: best runs only, so a bad day never lands here ---------- */
+function topRuns(){
+  return DB.runs.slice().sort(function(x,y){
+    return y.sc-x.sc || y.acc-x.acc || x.ms-y.ms;
+  }).slice(0,10);
+}
+function paintBoard(){
+  var list=el('boardList'); list.innerHTML='';
+  var top=topRuns();
+  if(!top.length){
+    list.innerHTML='<p class="empty">No runs logged yet. Finish a mission and the best ten land here — only the good ones, never the rough ones.</p>';
+    return;
+  }
+  top.forEach(function(r,i){
+    var row=document.createElement('div');
+    row.className='brow'+(i===0?' gold':'')+(r.t===S._lastRun?' fresh':'');
+    row.innerHTML=
+      '<span class="pos">'+(i+1)+'</span>'+
+      '<span class="what">'+missionLabel(r.m,r.op)+
+        '<span class="whn">'+when(r.t)+'</span></span>'+
+      '<span class="pts">'+r.sc+'<small>'+r.acc+'% · '+r.c+'/'+r.n+'</small></span>';
+    list.appendChild(row);
+  });
+}
+
+/* ---------- progress report: the parent view ---------- */
+function paintStats(){
+  var totalN=0, totalW=0, k;
+  for(k in DB.facts){ totalN+=DB.facts[k].n; totalW+=DB.facts[k].w; }
+  el('pQ').textContent=totalN;
+  el('pAcc').textContent = totalN ? Math.round((totalN-totalW)/totalN*100)+'%' : '—';
+  el('pRuns').textContent=DB.runs.length;
+
+  /* A fact counts towards both of its numbers: 7 x 8 is practice of the
+     7s and the 8s alike, so it appears in both bars. */
+  var wrap=el('pTables'); wrap.innerHTML='';
+  for(var n=LOW;n<=HIGH;n++){
+    var att=0, wrong=0;
+    for(k in DB.facts){
+      var pr=k.split('x');
+      if(+pr[0]===n || +pr[1]===n){ att+=DB.facts[k].n; wrong+=DB.facts[k].w; }
+    }
+    var pct = att ? Math.round((att-wrong)/att*100) : 0;
+    var band = !att ? '' : (pct>=90?'hi':(pct>=70?'mid':'lo'));
+    var col  = !att ? 'var(--dim)' : (pct>=90?'var(--plasma)':(pct>=70?'var(--solar)':'var(--magenta)'));
+    var row=document.createElement('div');
+    row.className='tstat';
+    row.innerHTML=
+      '<span class="tname">×'+n+'</span>'+
+      '<span class="ttrack"><i class="'+band+'" style="width:'+(att?pct:0)+'%"></i></span>'+
+      '<span class="tpct" style="color:'+col+'">'+(att?pct+'%':'—')+'</span>'+
+      '<span class="tn">'+(att?att+' asked':'not yet')+'</span>';
+    wrap.appendChild(row);
+  }
+
+  var miss=el('pMissed'); miss.innerHTML='';
+  var arr=[];
+  for(k in DB.facts){ if(DB.facts[k].w>0) arr.push([k,DB.facts[k]]); }
+  arr.sort(function(x,y){ return y[1].w-x[1].w || (y[1].w/y[1].n)-(x[1].w/x[1].n); });
+  if(!arr.length){
+    miss.innerHTML='<span class="nailchip clean">Nothing missed yet.</span>';
+  }else{
+    arr.slice(0,10).forEach(function(pr){
+      var t=pr[0].split('x'), f=pr[1];
+      var c=document.createElement('span');
+      c.className='nailchip'+(f.cur===0?' clean':'');
+      c.textContent=t[0]+' × '+t[1]+' = '+(t[0]*t[1])+'  ·  wrong '+f.w+' of '+f.n;
+      miss.appendChild(c);
+    });
+  }
+
+  var rec=el('pRecent'); rec.innerHTML='';
+  if(!DB.runs.length){
+    rec.innerHTML='<p class="empty">No sessions yet.</p>';
+  }else{
+    DB.runs.slice(0,12).forEach(function(r){
+      var row=document.createElement('div');
+      row.className='rrow'+(r.acc>=80?'':' miss');
+      row.innerHTML=
+        '<span class="q">'+missionLabel(r.m,r.op)+
+          '<span class="got" style="display:block">'+when(r.t)+'</span></span>'+
+        '<span class="got">'+r.c+'/'+r.n+' · '+r.acc+'% · '+r.sc+'</span>';
+      rec.appendChild(row);
+    });
+  }
+}
+
 /* ---------- wiring ---------- */
-paintTables(); paintNail(); buildPad();
+paintOps(); paintTables(); paintNail(); buildPad();
 toggle('opt-turbo','turbo'); toggle('opt-flip','flip'); toggle('opt-sound','sound');
 
 el('unlockBtn').addEventListener('click',function(e){
@@ -1094,6 +1381,33 @@ el('again').addEventListener('click',function(){ startRound(null); });
 el('fixit').addEventListener('click',function(){ startRound(S._missed); });
 el('home').addEventListener('click',function(){ clearTimer(); stopDrone(); SFX.tap(); screenTo('home'); });
 el('abort').addEventListener('click',function(){ clearTimer(); stopDrone(); S.locked=true; screenTo('home'); });
+
+el('toBoard').addEventListener('click',function(){ SFX.tap(); paintBoard(); screenTo('board'); });
+el('toStats').addEventListener('click',function(){ SFX.tap(); paintStats(); screenTo('stats'); });
+el('boardBack').addEventListener('click',function(){ SFX.tap(); screenTo('home'); });
+el('statsBack').addEventListener('click',function(){ SFX.tap(); disarmWipe(); screenTo('home'); });
+
+/* Erasing everything takes two taps, not a browser dialog a child can
+   dismiss by accident. */
+var wipeArmed=null;
+function disarmWipe(){
+  clearTimeout(wipeArmed); wipeArmed=null;
+  var w=el('wipe'); w.classList.remove('armed'); w.textContent='Erase all progress';
+}
+el('wipe').addEventListener('click',function(){
+  var w=el('wipe');
+  if(!wipeArmed){
+    w.classList.add('armed');
+    w.textContent='Tap again to erase everything';
+    wipeArmed=setTimeout(disarmWipe,4000);
+    return;
+  }
+  disarmWipe();
+  DB=blank(); save();
+  S._lastRun=null;
+  paintStats(); paintTables(); paintNail();
+  SFX.bad();
+});
 
 /* keep the console from bouncing on iOS */
 document.addEventListener('touchmove',function(e){
